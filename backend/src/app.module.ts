@@ -6,6 +6,7 @@ import { UserModule } from './user/user.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
+import { PostsModule } from './posts/posts.module';
 import config from './config/config';
 
 @Module({
@@ -36,6 +37,7 @@ import config from './config/config';
 
     AuthModule,
     UserModule,
+    PostsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
