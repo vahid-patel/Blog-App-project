@@ -15,12 +15,13 @@ export class AuthController {
 
   @Post('signup')
   signup(@Body() body: { email: string; name: string; password: string }) {
+    console.log(body.password);
     return this.authService.signUp(body.email, body.name, body.password);
   }
 
   @Post('login')
-  login(@Body() body: { email: string; name: string }) {
-    return this.authService.login(body.email, body.name);
+  login(@Body() body: { email: string; password: string }) {
+    return this.authService.login(body.email, body.password);
   }
 
   @UseGuards(AuthGuard('jwt'))

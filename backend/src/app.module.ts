@@ -41,6 +41,6 @@ import { AuthService } from './auth/auth.service';
     PostsModule,
   ],
   controllers: [AppController],
-  providers: [AppService, AuthService],
+  providers: [AppService],
 })
 export class AppModule {}
