@@ -7,6 +7,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import config from './config/config';
+import { AuthService } from './auth/auth.service';
 
 @Module({
   imports: [
@@ -17,11 +18,11 @@ import config from './config/config';
 
     // ✅ Mongoose connection
     MongooseModule.forRootAsync({
-      imports : [ConfigModule],
-      useFactory : async (config) => ({
-        uri : config.get('database.uri')
+      imports: [ConfigModule],
+      useFactory: async (config) => ({
+        uri: config.get('database.uri'),
       }),
-      inject : [ConfigService]
+      inject: [ConfigService],
     }),
 
     // ✅ JWT config
@@ -38,6 +39,6 @@ import config from './config/config';
     UserModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, AuthService],
 })
 export class AppModule {}
