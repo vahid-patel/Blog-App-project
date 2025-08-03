@@ -12,4 +12,8 @@ export class PostsService {
     const newPost = new this.postModel(postDto);
     return await newPost.save();
   }
+
+  async getPosts() {
+    return await this.postModel.find();
+  }
 }
