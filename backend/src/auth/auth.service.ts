@@ -55,7 +55,7 @@ export class AuthService {
       userId: isUserPresent._id 
     };
 
-    const token =  this.jwtService.sign(payload);
+    const token =  this.jwtService.sign(payload, {expiresIn : '1h'});
     
     console.log(token);
     return {
