@@ -22,4 +22,8 @@ export class CreateBlogPostDto {
   @IsOptional()
   @IsString()
   status?: 'Draft' | 'Published';
+
+  @IsOptional()
+  @IsString()
+  authorId?: string;
 }

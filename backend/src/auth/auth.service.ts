@@ -39,16 +39,12 @@ export class AuthService {
     const {email, password} = loginData
     
     const isUserPresent = await this.userModel.findOne({ email });
-    
-    if (!isUserPresent) {
-      throw new UnauthorizedException('Wrong Credentials')
-    }
-    
-    const isMatch =  await bcrypt.compare(password, isUserPresent.password);
-
-    if (!isMatch) {
-      throw new UnauthorizedException('Wrong Credentials')
-    };
+    console.log(isUserPresent);
+    if (!isUserPresent) return null;
+    // console.log(isUserPresent.password);
+    // console.log(password);
+    const isMatch = await bcrypt.compare(password, isUserPresent.password);
+    if (!isMatch) return null;
 
     const payload = { 
       email: isUserPresent.email,
@@ -58,6 +54,7 @@ export class AuthService {
     const token = this.jwtService.sign(payload);
     
     console.log(token);
+
     return {
       access_token: token,
     };
