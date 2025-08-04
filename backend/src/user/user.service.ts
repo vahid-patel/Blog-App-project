@@ -10,5 +10,7 @@ export class UserService {
     return this.userModel.find();
   }
 
-  
+  async findById(id: string): Promise<User | null> {
+    return this.userModel.findById(id).select('-password').exec(); // hide password
+  }
 }
