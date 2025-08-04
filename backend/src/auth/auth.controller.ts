@@ -8,20 +8,21 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthGuard } from '@nestjs/passport';
+import { signupDto } from './authDto/signup.dto';
+import { loginDto } from './authDto/login.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('signup')
-  signup(@Body() body: { email: string; name: string; password: string }) {
-    console.log(body.password);
-    return this.authService.signUp(body.email, body.name, body.password);
+  signup(@Body() signupData:signupDto ) {
+    return this.authService.signUp(signupData);
   }
 
   @Post('login')
-  login(@Body() body: { email: string; password: string }) {
-    return this.authService.login(body.email, body.password);
+  login(@Body() loginData : loginDto) {
+    return this.authService.login(loginData);
   }
 
   @UseGuards(AuthGuard('jwt'))

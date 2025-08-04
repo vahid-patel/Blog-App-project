@@ -8,7 +8,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PostsModule } from './posts/posts.module';
 import config from './config/config';
-import { AuthService } from './auth/auth.service';
 
 @Module({
   imports: [
