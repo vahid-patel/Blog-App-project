@@ -10,6 +10,7 @@ export class PostsController {
   @UseGuards(AuthGuard('jwt'))
   @Post()
   async create(@Body() postDto: CreateBlogPostDto) {
+    console.log(postDto);
     return this.postsService.createPost(postDto);
   }
 

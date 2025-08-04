@@ -26,12 +26,13 @@ export class AuthService {
     // console.log(isUserPresent.password);
     // console.log(password);
     const isMatch = await bcrypt.compare(password, isUserPresent.password);
-    if (!isMatch) return null;
+    if (!isMatch) return 'error';
 
     const payload = { email: isUserPresent.email, sub: isUserPresent._id };
     const token = this.jwtService.sign(payload);
     console.log('hello');
     console.log(token);
+
     return {
       access_token: token,
     };
