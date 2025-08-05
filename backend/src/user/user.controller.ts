@@ -1,7 +1,10 @@
-import { Body, Controller, Get, Patch, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Req, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { AuthGuard } from '@nestjs/passport';
 import { signupDto } from 'src/auth/authDto/signup.dto';
+import { RolesGuard } from 'src/common/guards/roles.guard';
+import { Roles } from 'src/common/decorators/roles.decorator';
+import { UserRole } from './userSchema/User.schema';
 
 @Controller('user')
 export class UserController {
@@ -17,6 +20,20 @@ export class UserController {
   @Patch('update')
   updateUser(@Body() updateData : signupDto, @Req() req){
     return this.userService.updateUser(updateData,req)
+  }
+
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(UserRole.ADMIN)
+  @Get('all')
+  getAllUsers(){
+    return this.userService.findAll()
+  }
+
+  @UseGuards(AuthGuard('jwt'),RolesGuard)
+  @Roles(UserRole.ADMIN)
+  @Delete('delete/:id')
+  deleteUser(@Param('id') id : string){
+    return this.userService.removeUser(id)
   }
   
 }

@@ -13,10 +13,14 @@ export class UserService {
     return this.userModel.findById(id).select('-password').exec(); // hide password
   }
 
+  async findAll(){
+    return this.userModel.find().select('-password')
+  }
+
   async updateUser(updateData : updateDto, req){
     const {name , password} = updateData
-    const {email} = req.user
-    const user = await this.userModel.findOne({email})
+    const {userId} = req.user
+    const user = await this.userModel.findById(userId)
 
     if(!user){
       throw new BadRequestException('User does not exist')
@@ -41,5 +45,9 @@ export class UserService {
       }
     }
 
+  }
+
+  removeUser(id:string){
+    return this.userModel.findByIdAndDelete(id)
   }
 }
