@@ -5,6 +5,7 @@ import { signupDto } from 'src/auth/authDto/signup.dto';
 import { RolesGuard } from 'src/common/guards/roles.guard';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { UserRole } from './userSchema/User.schema';
+import { Request } from 'express';
 
 @Controller('user')
 export class UserController {
@@ -12,13 +13,13 @@ export class UserController {
 
   @UseGuards(AuthGuard('jwt'))
   @Get('profile')
-  getUsers(@Req() req) {
+  getUsers(@Req() req : Request) {
     return req.user;
   }
 
   @UseGuards(AuthGuard('jwt'))
   @Patch('update')
-  updateUser(@Body() updateData : signupDto, @Req() req){
+  updateUser(@Body() updateData : signupDto, @Req() req : Request){
     return this.userService.updateUser(updateData,req)
   }
 
