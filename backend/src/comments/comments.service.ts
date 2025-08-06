@@ -8,7 +8,7 @@ import { commentDto } from './commentDto/comment.dto';
 export class CommentsService {
     constructor (@InjectModel(Comment.name) private commentModel : Model<CommentDocument>){}
 
-    async commentcreate(postId : Types.ObjectId , CommentData : commentDto, userId){
+    async commentcreate(postId : string , CommentData : commentDto, userId : string){
         const newComment = new this.commentModel({
             ...CommentData,
             postId : new Types.ObjectId(postId),
@@ -17,4 +17,10 @@ export class CommentsService {
 
         return await newComment.save()
     }
+
+    async getAllCommentsofPost(postId: Types.ObjectId){
+        return await this.commentModel.findById(postId)
+    }
+
+    async deleteComment(){}
 }

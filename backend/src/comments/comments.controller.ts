@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Req, Param, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, Req, Param, UseGuards, Get } from '@nestjs/common';
 import { CommentsService } from './comments.service';
 import { commentDto } from './commentDto/comment.dto';
 import { Types } from 'mongoose';
@@ -10,9 +10,13 @@ export class CommentsController {
 
   @UseGuards(AuthGuard('jwt'))
   @Post('create/:postId')
-  async createComment(@Param('postId') postId : Types.ObjectId ,@Body() CommentData : commentDto, @Req() req){
+  async createComment(@Param('postId') postId : string ,@Body() CommentData : commentDto, @Req() req){
     return this.commentsService.commentcreate(postId ,CommentData, req.user.userId)
   }
 
+  @Get('posts/:postId')
+  async getAllComments(@Param('postId') postId : Types.ObjectId){
+    return this.commentsService.getAllCommentsofPost(postId)
+  }
   
 }
