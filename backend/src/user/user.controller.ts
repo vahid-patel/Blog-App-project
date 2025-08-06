@@ -19,7 +19,7 @@ export class UserController {
 
   @UseGuards(AuthGuard('jwt'))
   @Patch('update')
-  updateUser(@Body() updateData : signupDto, @Req() req : Request){
+  updateUser(@Body() updateData : signupDto, @Req() req : Request ){
     return this.userService.updateUser(updateData,req)
   }
 

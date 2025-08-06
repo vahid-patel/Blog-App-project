@@ -1,29 +1,25 @@
 // src/blog/dto/create-blog-post.dto.ts
-
-import { IsNotEmpty, IsString, IsOptional } from 'class-validator';
+import { Types } from 'mongoose';
+import { IsNotEmpty, IsString, IsEnum, IsMongoId, MinLength, MaxLength } from 'class-validator';
+import { categories } from '../schemas/post.schema';
 
 export class CreateBlogPostDto {
   @IsNotEmpty()
   @IsString()
+  @MinLength(3)
+  @MaxLength(150)
   title: string;
 
   @IsNotEmpty()
   @IsString()
+  @MinLength(10)
   content: string;
 
-  @IsOptional()
-  @IsString({ each: true })
-  category?: string;
+  @IsNotEmpty()
+  @IsEnum(categories, {message : 'Invalid Category'})
+  category: categories;
 
-  @IsOptional()
-  @IsString({ each: true })
-  tags?: string;
-
-  @IsOptional()
-  @IsString()
-  status?: 'Draft' | 'Published';
-
-  @IsOptional()
-  @IsString()
-  authorId?: string;
+  @IsMongoId()
+  @IsNotEmpty()
+  authorId: Types.ObjectId;
 }

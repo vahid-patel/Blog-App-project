@@ -9,7 +9,7 @@ export enum UserRole {
   USER = 'USER',
 }
 
-@Schema()
+@Schema({timestamps : true})
 export class User {
   @Prop({ type: String, required: true })
   name: string;
@@ -23,7 +23,6 @@ export class User {
   @Prop({
     type: String,
     required: true,
-    trim: true,
     enum: UserRole,
     default: UserRole.USER,
   })
