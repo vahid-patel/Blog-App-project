@@ -35,10 +35,11 @@ export class PostsService {
   }
 
   async getPostById(postId: string) {
-    return await this.postModel.findById(postId);
+    return await this.postModel.findById(postId).populate('author', 'name email');
   }
 
   async updatePost(postId: string, updateData: updatePostDto, userId: string) {
+    const {title, content, category}= updateData
     const post = await this.postModel.findById(postId);
 
     if (!post) {
@@ -51,7 +52,15 @@ export class PostsService {
       );
     }
 
-    post.set(updateData);
+    if (title) {
+      post.title = title;
+    }
+    if (content) {
+      post.content = content;
+    }
+    if (category) {
+      post.category = category;
+    }   
 
     return await post.save();
   }
@@ -69,8 +78,47 @@ export class PostsService {
 
     await this.postModel.findByIdAndDelete(postId);
 
-    await this.commentModel.deleteMany({ postId: postId })
+    await this.commentModel.deleteMany({ postId: postId });
 
     return { message: 'Post deleted successfully' };
+  }
+
+  async likePost(postId: string, userId: string): Promise<any> {
+    
+    return await this.postModel.updateOne(
+      { _id: postId },
+      {
+        $addToSet: { likes: new Types.ObjectId(userId) },
+        $pull: { dislikes: new Types.ObjectId(userId) },
+      },
+    );
+  }
+
+  async dislikePost(postId: string, userId: string): Promise<any> {
+    return await this.postModel.updateOne(
+      { _id: new Types.ObjectId(postId) },
+      {
+        $addToSet: { dislikes: new Types.ObjectId(userId) },
+        $pull: { likes: new Types.ObjectId(userId) },
+      },
+    );
+  }
+
+  async removeLike(postId: string, userId: string): Promise<any> {
+    return await this.postModel.updateOne(
+      { _id: new Types.ObjectId(postId) },
+      {
+        $pull: { likes: new Types.ObjectId(userId) },
+      },
+    );
+  }
+
+  async removeDislike(postId: string, userId: string): Promise<any> {
+    return await this.postModel.updateOne(
+      { _id: new Types.ObjectId(postId) },
+      {
+        $pull: { dislikes: new Types.ObjectId(userId) },
+      },
+    );
   }
 }

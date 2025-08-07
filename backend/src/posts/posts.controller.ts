@@ -39,7 +39,7 @@ export class PostsController {
   @Patch(':postId')
   async updatePost(
     @Param('postId') postId: string,
-    updateData: updatePostDto,
+    @Body() updateData: updatePostDto,
     @Req() req,
   ) {
     return this.postsService.updatePost(postId, updateData, req.user.userId);
@@ -49,5 +49,30 @@ export class PostsController {
   @Delete(':postId')
   async deletePost(@Param('postId') postId: string, @Req() req) {
     return this.postsService.deletePost(postId, req.user);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Post(':postId/like')
+  async likePost(@Param('postId') postId: string, @Req() req) {
+    return this.postsService.likePost(postId, req.user.userId);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Post(':postId/dislike')
+  async dislikePost(@Param('postId') postId: string, @Req() req) {
+    
+    return this.postsService.dislikePost(postId, req.user.userId);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Delete(':postId/like')
+  async removeLike(@Param('postId') postId: string, @Req() req) {
+    return this.postsService.removeLike(postId, req.user.userId);
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Delete(':postId/dislike')
+  async removeDislike(@Param('postId') postId: string, @Req() req) {
+    return this.postsService.removeDislike(postId, req.user.userId);
   }
 }

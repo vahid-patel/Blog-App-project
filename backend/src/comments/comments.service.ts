@@ -41,7 +41,8 @@ export class CommentsService {
       throw new UnauthorizedException('not authorized to delete a comment');
     }
 
-    return this.commentModel.findByIdAndDelete(commentId);
+    this.commentModel.findByIdAndDelete(commentId);
+    return {message : 'Comment deleted'}
   }
 
   async likeComment(commentId: string, userId: string) {
