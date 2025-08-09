@@ -4,7 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UserDocument } from 'src/user/userSchema/User.schema';
 import * as bcrypt from 'bcrypt';
-import { signupDto } from './authDto/signup.dto';
+import { SignupDto } from './authDto/signup.dto';
 import { loginDto } from './authDto/login.dto';
 
 @Injectable()
@@ -14,8 +14,8 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signUp(signupData : signupDto) {
-    const {email, password, name, role} = signupData
+  async signUp(signupDto : SignupDto) {
+    const {email, password, name, role} = signupDto
 
     const isUser = await this.userModel.findOne({email})
 
@@ -25,7 +25,7 @@ export class AuthService {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    await this.userModel.create({
+    const newUser = await this.userModel.create({
       name : name,
       email : email,
       password : hashedPassword,
@@ -33,7 +33,7 @@ export class AuthService {
     })
     return 'Created'
   }
-
+  // success, data, status code, message, error
   async login(loginData : loginDto) {
 
     const {email, password} = loginData

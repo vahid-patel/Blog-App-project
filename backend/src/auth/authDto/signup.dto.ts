@@ -1,7 +1,7 @@
 import { IsEmail, IsEnum, IsNotEmpty, IsString, IsStrongPassword } from 'class-validator';
 import { UserRole } from 'src/user/userSchema/User.schema';
 
-export class signupDto {
+export class SignupDto {
   @IsNotEmpty()
   @IsString()
   name: string;
