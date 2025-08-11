@@ -31,7 +31,7 @@ export class AuthService {
       password : hashedPassword,
       role : role
     })
-    return 'Created'
+    return newUser
   }
   // success, data, status code, message, error
   async login(loginData : loginDto) {
@@ -58,7 +58,7 @@ export class AuthService {
     
     console.log(token);
     return {
-      access_token: token,
+      token: token,
     };
   }
 }

@@ -10,7 +10,7 @@ export class UserService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
   
   async findById(id: string): Promise<User | null> {
-    return this.userModel.findById(id).select('-password').exec(); // hide password
+    return this.userModel.findById(id).select('-password').exec(); 
   }
 
   async findAll(){
