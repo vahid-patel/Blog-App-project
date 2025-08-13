@@ -30,6 +30,18 @@ export class PostsService {
     return await newPost.save();
   }
 
+  async searchPosts(keyword : string){
+
+    if(!keyword || keyword.trim() == ''){
+      return {message : 'No results'}
+    }
+
+    return this.postModel.find(
+      {$text : {$search : keyword } },
+      {score : {$meta : 'textScore' } }
+    ).sort({ score : { $meta : 'textScore' } }).exec()
+  }
+
   async getAllPosts() {
     return await this.postModel.find().populate('author', 'name email');
   }

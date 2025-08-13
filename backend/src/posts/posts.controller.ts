@@ -8,6 +8,7 @@ import {
   UseGuards,
   Patch,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreateBlogPostDto } from './postDto/post.dto';
@@ -23,6 +24,11 @@ export class PostsController {
   @Post('create')
   async create(@Body() postData: CreateBlogPostDto, @Req() req) {
     return this.postsService.createPost(postData, req.user.userId);
+  }
+
+  @Get('search')
+  async searchPost(@Query('q') query : string){
+    return this.postsService.searchPosts(query)
   }
 
   @Get()
