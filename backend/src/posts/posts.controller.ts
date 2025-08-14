@@ -27,13 +27,19 @@ export class PostsController {
   }
 
   @Get('search')
-  async searchPost(@Query('q') query : string){
-    return this.postsService.searchPosts(query)
+  async searchPost(@Query('q') query : string, @Query('page') page : string = '1', @Query('limit') limit : string = '5'){
+    const Page = parseInt(page)
+    const Limit = parseInt(limit)
+
+    return this.postsService.searchPosts(query,Page, Limit)
   }
 
   @Get()
-  async getAllPosts() {
-    return this.postsService.getAllPosts();
+  async getAllPosts(@Query('page') page : string = '1', @Query('limit') limit : string = '5') {
+
+    const Page = parseInt(page)
+    const Limit = parseInt(limit)
+    return this.postsService.getAllPosts(Page, Limit);
   }
 
   @Get(':postId')

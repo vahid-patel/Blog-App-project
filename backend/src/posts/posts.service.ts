@@ -14,6 +14,7 @@ import {
   CommentDocument,
 } from 'src/comments/commentSchema/comment.schema';
 
+
 @Injectable()
 export class PostsService {
   constructor(
@@ -30,20 +31,49 @@ export class PostsService {
     return await newPost.save();
   }
 
-  async searchPosts(keyword : string){
+  async searchPosts(keyword : string, page : number, limit : number){
+
+    const skip = (page - 1) * limit
 
     if(!keyword || keyword.trim() == ''){
       return {message : 'No results'}
     }
 
-    return this.postModel.find(
-      {$text : {$search : keyword } },
+    const filter = {$text : {$search : keyword } }
+
+    const posts = await this.postModel.find(
+      filter,
       {score : {$meta : 'textScore' } }
-    ).sort({ score : { $meta : 'textScore' } }).exec()
+    ).skip(skip).limit(limit).populate('author', 'name email').sort({ score : { $meta : 'textScore' } })
+
+    const totalPosts = await this.postModel.countDocuments(filter)
+
+
+    return {
+      totalPosts,
+      page,
+      limit,
+      totalPages : Math.ceil(totalPosts/limit),
+      posts
+    }
   }
 
-  async getAllPosts() {
-    return await this.postModel.find().populate('author', 'name email');
+  async getAllPosts(page : number , limit : number) {
+
+    const skip = (page - 1) * limit
+
+    const posts = await this.postModel.find().skip(skip).limit(limit).populate('author', 'name email');
+
+    const totalPosts = await this.postModel.countDocuments()
+    
+    return {
+      totalPosts,
+      page,
+      limit,
+      totalPages : Math.ceil(totalPosts/limit),
+      posts
+
+    }
   }
 
   async getPostById(postId: string) {
