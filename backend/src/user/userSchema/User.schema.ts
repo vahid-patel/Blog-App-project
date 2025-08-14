@@ -27,6 +27,15 @@ export class User {
     default: UserRole.USER,
   })
   role: UserRole;
+
+  @Prop({default : false})
+  verified : boolean
+
+  @Prop()
+  otp : string
+
+  @Prop()
+  otpExpires : Date
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

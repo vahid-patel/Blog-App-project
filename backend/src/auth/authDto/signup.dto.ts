@@ -24,3 +24,11 @@ export class SignupDto {
   @IsEnum(UserRole)
   role: UserRole;
 }
+
+export class VerifyOtpDto {
+  @IsEmail()
+  email : string
+
+  @IsNotEmpty()
+  otp : string
+}

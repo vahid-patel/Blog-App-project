@@ -4,14 +4,16 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UserDocument } from 'src/user/userSchema/User.schema';
 import * as bcrypt from 'bcrypt';
-import { SignupDto } from './authDto/signup.dto';
+import { SignupDto, VerifyOtpDto } from './authDto/signup.dto';
 import { loginDto } from './authDto/login.dto';
+import { generateOtp } from 'src/common/utils/otp.util';
+import { MailerService } from 'src/common/mailer/mail.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
-    private jwtService: JwtService,
+    private jwtService: JwtService, private mailerService : MailerService
   ) {}
 
   async signUp(signupDto : SignupDto) {
@@ -24,14 +26,44 @@ export class AuthService {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+    const otp = generateOtp()
+    const otpExpires = new Date(Date.now() + 10 * 60 * 1000)
 
     const newUser = await this.userModel.create({
       name : name,
       email : email,
       password : hashedPassword,
-      role : role
+      role : role,
+      verified : false,
+      otp,
+      otpExpires
+
     })
-    return newUser
+
+    await this.mailerService.sendOtpToEmail(email, otp)
+    return {Message : 'User registered. Please check your email for OTP'}
+  }
+
+  async verifyOtp(verifyOtpDto : VerifyOtpDto){
+    const {email, otp} = verifyOtpDto
+    
+    const user = await this.userModel.findOne({email})
+
+    if(!user) throw new BadRequestException('User not Found')
+    if(user.verified) throw new BadRequestException('Already Verified')
+    if(user.otp !== otp) throw new BadRequestException('Invalid OTP')
+    if(user.otpExpires < new Date()) throw new BadRequestException('OTP Expired')
+
+    user.verified = true
+    await this.userModel.updateOne(
+      {email},
+      {
+        $unset : {otp : '', otpExpires : ''}
+      }
+    )
+    
+    await user.save()
+    return {message : 'Email Verified Successfully'}
   }
   // success, data, status code, message, error
   async login(loginData : loginDto) {
@@ -43,6 +75,8 @@ export class AuthService {
     if (!isUserPresent) {
       throw new UnauthorizedException('Wrong Credentials')
     }
+
+    if(!isUserPresent.verified) throw new UnauthorizedException('Please verify your email first')
     
     const isMatch =  await bcrypt.compare(password, isUserPresent.password);
 
