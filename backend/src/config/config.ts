@@ -14,5 +14,10 @@ export default () => ({
     BREVO_HOST : process.env.BREVO_HOST,
     BREVO_PORT : process.env.BREVO_PORT,
     sender_email : process.env.sender_email
+  },
+  redis : {
+    REDIS_HOST : process.env.REDIS_HOST,
+    REDIS_PORT : process.env.REDIS_PORT,
+    REDIS_PASS : process.env.REDIS_PASS
   }
 });

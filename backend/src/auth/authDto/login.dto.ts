@@ -14,3 +14,9 @@ export class loginDto{
     password : string
 
 }
+
+export class ForgotPassDto{
+    @IsNotEmpty()
+    @IsNotEmpty()
+    email : string
+}

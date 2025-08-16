@@ -1,17 +1,19 @@
-import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Inject, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UserDocument } from 'src/user/userSchema/User.schema';
 import * as bcrypt from 'bcrypt';
+import * as crypto from 'crypto'
 import { SignupDto, VerifyOtpDto } from './authDto/signup.dto';
-import { loginDto } from './authDto/login.dto';
+import { ForgotPassDto, loginDto } from './authDto/login.dto';
 import { generateOtp } from 'src/common/utils/otp.util';
 import { MailerService } from 'src/common/mailer/mail.service';
+import { ResetpassDto } from './authDto/reset-pass.dto';
 
 @Injectable()
 export class AuthService {
-  constructor(
+  constructor(@Inject('REDIS_CLIENT') private readonly redisClient : any,
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     private jwtService: JwtService, private mailerService : MailerService
   ) {}
@@ -37,7 +39,6 @@ export class AuthService {
       verified : false,
       otp,
       otpExpires
-
     })
 
     await this.mailerService.sendOtpToEmail(email, otp)
@@ -94,5 +95,41 @@ export class AuthService {
     return {
       token: token,
     };
+  }
+
+  async forgotPass(forgotPassDto : ForgotPassDto){
+    const {email} = forgotPassDto
+    const user = await this.userModel.findOne({email})
+    if(!user) throw new NotFoundException('User not Exist')
+    
+    const token = crypto.randomBytes(32).toString('hex')
+
+    await this.redisClient.set(`resetToken:${user._id}`, token, 'EX', 900)
+
+    const resetLink = `http://localhost:3000/reset-password?token=${token}&userId=${user._id}`
+
+    await this.mailerService.sendLinkToEmail(email,resetLink)
+
+    return { message: 'Password reset link sent to email' };
+    
+  }
+
+  async resetPass(resetPassDto : ResetpassDto){
+    const {userId, token, newPassword} = resetPassDto
+
+    const storedToken = await this.redisClient.get(`resetToken:${userId}`)
+
+    if(!storedToken) throw new BadRequestException('Invalid or Token Expired')
+
+    if(storedToken !== token) throw new BadRequestException("invalid token")
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10)
+
+    await this.userModel.findByIdAndUpdate(userId,{password : hashedPassword})
+
+    await this.redisClient.del(`resetToken:${userId}`)
+
+    return { message: 'Password reset successful' }
+
   }
 }

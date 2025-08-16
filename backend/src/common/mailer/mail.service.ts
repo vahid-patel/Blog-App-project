@@ -39,4 +39,17 @@ export class MailerService {
       console.error('Email send failed:', err);
     }
   }
+  async sendLinkToEmail(to: string, link: string) {
+    try {
+      const info = await this.transporter.sendMail({
+        from: this.configService.get<string>('Brevo.sender_email'),
+        to,
+        subject: 'Your Forgot Password Verification Link',
+        text: `Your Forgot Password link is ${link}. It expires in 15 minutes.`,
+      });
+      console.log('Email sent:', info.messageId);
+    } catch (err) {
+      console.error('Email send failed:', err);
+    }
+  }
 }

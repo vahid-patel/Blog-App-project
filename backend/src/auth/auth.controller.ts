@@ -1,8 +1,9 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { SignupDto, VerifyOtpDto } from './authDto/signup.dto';
-import { loginDto } from './authDto/login.dto';
+import { ForgotPassDto, loginDto } from './authDto/login.dto';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ResetpassDto } from './authDto/reset-pass.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -27,5 +28,15 @@ export class AuthController {
   verifyOTP(@Body() verifyOtpDto : VerifyOtpDto){
     console.log('verifyOtpDto:', verifyOtpDto);
     return this.authService.verifyOtp(verifyOtpDto)
+  }
+
+  @Post('forgot-pass')
+  forgotPass(@Body() forgotPassDto : ForgotPassDto){
+    return this.authService.forgotPass(forgotPassDto)
+  }
+
+  @Post('reset-password')
+  resetPassword(@Body() resetPassDto : ResetpassDto){
+    return this.authService.resetPass(resetPassDto)
   }
 }
