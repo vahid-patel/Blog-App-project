@@ -12,6 +12,7 @@ export default () => ({
     BREVO_USER : process.env.BREVO_USER,
     BREVO_PASS : process.env.BREVO_PASS,
     BREVO_HOST : process.env.BREVO_HOST,
-    BREVO_PORT : process.env.BREVO_PORT
+    BREVO_PORT : process.env.BREVO_PORT,
+    sender_email : process.env.sender_email
   }
 });
