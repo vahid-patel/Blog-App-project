@@ -4,10 +4,10 @@ export class updateDto{
     
     @IsNotEmpty()
     @IsString()
-    name: string;
+    name!: string;
 
     @IsNotEmpty()
     @IsString()
     @IsStrongPassword()
-    password : string
+    password! : string
 }

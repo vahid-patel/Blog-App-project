@@ -12,13 +12,13 @@ export enum UserRole {
 @Schema({timestamps : true})
 export class User {
   @Prop({ type: String, required: true })
-  name: string;
+  name!: string;
 
   @Prop({ type: String, unique: true, required: true })
-  email: string;
+  email!: string;
 
   @Prop({ type: String, required: true })
-  password: string;
+  password!: string;
 
   @Prop({
     type: String,
@@ -26,16 +26,16 @@ export class User {
     enum: UserRole,
     default: UserRole.USER,
   })
-  role: UserRole;
+  role!: UserRole;
 
   @Prop({default : false})
-  verified : boolean
+  verified! : boolean
 
   @Prop()
-  otp : string
+  otp! : string
 
   @Prop()
-  otpExpires : Date
+  otpExpires! : Date
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

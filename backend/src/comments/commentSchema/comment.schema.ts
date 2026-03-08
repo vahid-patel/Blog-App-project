@@ -10,31 +10,31 @@ export class Comment {
         ref : 'Post',
         required : true
     })
-    postId : Types.ObjectId
+    postId! : Types.ObjectId
 
     @Prop({
         type: Types.ObjectId,
         ref : 'User',
         required : true
     })
-    userId : Types.ObjectId
+    userId! : Types.ObjectId
 
     @Prop({required : true})
-    content : string
+    content! : string
 
     @Prop({
         type : [Types.ObjectId],
         ref : 'User',
         default : []
     })
-    likes : Types.ObjectId[]
+    likes! : Types.ObjectId[]
 
     @Prop({
         type : [Types.ObjectId],
         ref : 'User',
         default : []
     })
-    dislikes : Types.ObjectId[]
+    dislikes! : Types.ObjectId[]
 }
 
 export const commentSchema = SchemaFactory.createForClass(Comment)

@@ -3,8 +3,8 @@ import { PostsService } from './posts.service';
 import { PostsController } from './posts.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Post, PostSchema } from './schemas/post.schema';
-import { CommentsModule } from 'src/comments/comments.module';
-import { Comment, commentSchema } from 'src/comments/commentSchema/comment.schema';
+import { CommentsModule } from '../comments/comments.module';
+import { Comment, commentSchema } from '../comments/commentSchema/comment.schema';
 
 @Module({
   imports: [

@@ -12,7 +12,7 @@ import { updatePostDto } from './postDto/updatePost.dto';
 import {
   Comment,
   CommentDocument,
-} from 'src/comments/commentSchema/comment.schema';
+} from '../comments/commentSchema/comment.schema';
 
 
 @Injectable()

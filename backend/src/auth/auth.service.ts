@@ -2,13 +2,13 @@ import { BadRequestException, Inject, Injectable, NotFoundException, Unauthorize
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User, UserDocument } from 'src/user/userSchema/User.schema';
+import { User, UserDocument } from '../user/userSchema/User.schema';
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto'
 import { SignupDto, VerifyOtpDto } from './authDto/signup.dto';
 import { ForgotPassDto, loginDto } from './authDto/login.dto';
-import { generateOtp } from 'src/common/utils/otp.util';
-import { MailerService } from 'src/common/mailer/mail.service';
+import { generateOtp } from '../common/utils/otp.util';
+import { MailerService } from '../common/mailer/mail.service';
 import { ResetpassDto } from './authDto/reset-pass.dto';
 
 @Injectable()

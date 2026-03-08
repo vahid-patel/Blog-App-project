@@ -6,17 +6,17 @@ export class loginDto{
     @ApiProperty({ example: 'john@example.com', description: 'Email address' })
     @IsNotEmpty()
     @IsEmail()
-    email : string
+    email! : string
 
     @ApiProperty({ example: 'Strong@Password123', description: 'User password' })
     @IsNotEmpty()
     @IsString()
-    password : string
+    password! : string
 
 }
 
 export class ForgotPassDto{
     @IsNotEmpty()
     @IsNotEmpty()
-    email : string
+    email! : string
 }

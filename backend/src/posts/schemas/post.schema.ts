@@ -28,10 +28,10 @@ export enum categories {
 @Schema({ timestamps: true }) 
 export class Post {
   @Prop({ required: true })
-  title: string;
+  title!: string;
 
   @Prop({ required: true })
-  content: string;
+  content!: string;
 
   @Prop({
     type: String,
@@ -39,28 +39,28 @@ export class Post {
     enum: categories,
     default: categories.GENERAL,
   })
-  category: string;
+  category!: string;
 
   @Prop({
     type: Types.ObjectId,
     ref: 'User',
     required: true,
   })
-  author: Types.ObjectId;
+  author!: Types.ObjectId;
 
   @Prop({
     type : [Types.ObjectId],
     ref : 'User', 
     default : []
   })
-  likes : Types.ObjectId[]
+  likes! : Types.ObjectId[]
 
   @Prop({
     type : [Types.ObjectId],
     ref : 'User',
     default : []
   })
-  dislikes : Types.ObjectId[]
+  dislikes! : Types.ObjectId[]
 }
 
 export const PostSchema = SchemaFactory.createForClass(Post);

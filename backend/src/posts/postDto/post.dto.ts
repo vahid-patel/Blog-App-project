@@ -8,18 +8,18 @@ export class CreateBlogPostDto {
   @IsString()
   @MinLength(3)
   @MaxLength(150)
-  title: string;
+  title!: string;
 
   @IsNotEmpty()
   @IsString()
   @MinLength(10)
-  content: string;
+  content!: string;
 
   @IsNotEmpty()
   @IsEnum(categories, {message : 'Invalid Category'})
-  category: categories;
+  category!: categories;
 
   @IsMongoId()
   @IsNotEmpty()
-  authorId: Types.ObjectId;
+  authorId!: Types.ObjectId;
 }
