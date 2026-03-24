@@ -10,6 +10,10 @@ import { PostsModule } from './posts/posts.module';
 import { CommentsModule } from './comments/comments.module';
 import config from './config/config';
 
+import * as dns from 'dns';
+
+dns.setServers(["1.1.1.1", "8.8.8.8"]);
+
 @Module({
   imports: [
     ConfigModule.forRoot({
